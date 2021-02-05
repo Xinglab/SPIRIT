@@ -1,0 +1,33 @@
+Manual of SPIRIT (SPlint Improved Repeat Identifier for Transcripts)
+
+SPIRIT is a computational pipeline for processing alignment of call concensus of repeats from long-read RCA library with splint.
+Please contact Yuan Gao (gaoy@email.chop.edu or gy.james@163.com) for questions about SPIRIT.
+
+1 Commands and arguments
+How to run SPIRIT: 
+sh spirit.sh -I fastq_dir -O out_dir -D splint_nhmmer_db -L UMI_length -S SPIRIT_dir -T threads
+
+2 Preparation of running SPIRIT
+1) Please make sure your are using Linux system and parallel Perl, HMMER 3.3.1[1] and abPOA 1.0.6[2] have been installed and included in $PATH.
+
+2) Next prepare the database for your splint sequence as instructed by HMMER.
+For example, 
+makehmmerdb seqfile binaryfile
+
+3 An example of running SPIRIT
+1) Please download SPIRIT and toy_data first. Next uncompress fastq files in toy_data with gunzip;
+gunzip /path/to/toy_datatest/*fastq.gz
+
+2) Enter the directory of SPIRIT and type as follows in your terminal:
+sh spirit.sh -I /path/to/toy_datatest/ -O out -D /path/to/toy_datatest/database/splint_50nt.fa -L 60 -S ./ -T 5
+
+SPIRIT will finish processing the toy data in a few minutes.
+
+You will see two main output files in the directory 'out', which include:
+(1) extract_unit_splints_consensus_versatile_out.fa: a fasta file for consensus of repeat sequences
+(2) extract_unit_splints_consensus_versatile_out.fa.cDNA: a fasta file for both UMI and cDNA sequence
+
+
+References
+[1] Wheeler, T. J., & Eddy, S. R. (2013). nhmmer: DNA homology search with profile HMMs. Bioinformatics, 29(19), 2487-2489.
+[2] Gao, Y., Liu, Y., Ma, Y., Liu, B., Wang, Y., & Xing, Y. (2020). abPOA: an SIMD-based C library for fast partial order alignment using adaptive band. Bioinformatics, DOI:10.1093/bioinformatics/btaa963.
