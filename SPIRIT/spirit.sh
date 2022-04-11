@@ -83,21 +83,21 @@ if [ ! -d "$O" ]; then
 	fi
 fi
 
-HMMER_CHECK=$(nhmmer -h | awk '$2=="HMMER"&&$3=="3.3.1"{print "nhmmer OK"}') #{print $3}' | awk -F '.' '$1==3&&$2==3&&$3==1
+HMMER_CHECK=$(nhmmer -h | awk -F "." '$1=="# HMMER 3"&&$2=="3"{print "nhmmer OK"}') #{print $3}' | awk -F '.' '$1==3&&$2==3&&$3==1
 if [ "$HMMER_CHECK" = "nhmmer OK" ];
 then
 	echo "nhmmer OK"
 else
-	echo "nhmmer not OK"
+	echo "nhmmer not ready. Please check"
 	exit 2
 fi
 
-ABPOA_CHECK=$(abpoa -v)
-if [ "$ABPOA_CHECK" = "1.0.6" ];
+ABPOA_CHECK=$(abpoa -v | awk -F "." '$1=="1"&&($2=="1"||$2=="0"){print "abpoa OK"}')
+if [ "$ABPOA_CHECK" = "abpoa OK" ];
 then
 	echo "abpoa OK"
 else
-	echo "abpoa not OK"
+	echo "abpoa not ready. Please check"
 	exit 2
 fi
 
@@ -138,7 +138,10 @@ else
     exit 1;
 fi
 date +%T
-rm $O/extract_unit_splints_consensus_versatile_$NAME.fa
+
+if [ -f $O/extract_unit_splints_consensus_versatile_$NAME.fa ]; then
+    rm -f $O/extract_unit_splints_consensus_versatile_$NAME.fa
+fi
 
 if perl $S/parallel_abpoa.pl $O/extract_unit_splints_RAW_versatile_$NAME.fa0 $O/extract_unit_splints_consensus_versatile_$NAME.fa $T; then
     echo "parallel_abpoa done"
@@ -165,5 +168,6 @@ if [ $L -gt 0 ]; then
 	fi
 	date +%T
 fi
+echo "Finished"
 #cd /mnt/isilon/xing_lab/aspera/Feng/test_LRCA_pipeline2/
 #qsub -l h_vmem=8G -l m_mem_free=8G -pe smp 20 src2/spirit.sh -I TEST -O OUT -D /mnt/isilon/xing_lab/aspera/Feng/analysis/completeness_evaluation/splint_50nt.fa -L 60 -S src2 -T 10
