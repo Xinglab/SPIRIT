@@ -39,6 +39,8 @@ if ($max_thread >= 2) {
 	@ths = ();
 } else {
 	while (my ($file, $key_read) = each %split_files_key_read) {
+		system("rm -f $input_dir$file.pir") if -f "$input_dir$file.pir";
+		system("rm -f $input_dir$file.log2") if -f "$input_dir$file.log2";
 		&parallel_abPOA([$file, $key_read]);
 	}
 }
