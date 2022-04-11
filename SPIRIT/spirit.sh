@@ -92,7 +92,7 @@ else
 	exit 2
 fi
 
-ABPOA_CHECK=$(abpoa -v | awk -F "." '$1=="1"&&($2=="1"||$2=="0"){print "abpoa OK"}')
+ABPOA_CHECK=$(abpoa -v | awk -F "." '$1=="1"&&($2=="1"||($2=="0"&&$3>="6")){print "abpoa OK"}')
 if [ "$ABPOA_CHECK" = "abpoa OK" ];
 then
 	echo "abpoa OK"
